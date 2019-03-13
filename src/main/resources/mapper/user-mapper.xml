@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+    <insert id="insert" useGeneratedKeys="true" parameterType="user" keyProperty="id">
+        insert into travel1.user (name, password, mail)
+        values (#{name},#{password},#{mail});
+    </insert>
+    <delete id="delete">
+        DELETE FROM travel1.user
+        WHERE user.id = #{id}
+    </delete>
+    <update id="update">
+        UPDATE travel1.user
+        SET
+            name = #{name}, 
+            password = #{password}, 
+            mail = #{mail}
+        WHERE user.id = #{id}
+    </update>
+    <select id="selectAll" resultType="user">
+        SELECT *
+        FROM travel1.user
+        ORDER BY id
+    </select>
+    <select id="selectone" resultType="user">
+        SELECT *
+        FROM travel1.user
+        WHERE user.id = #{id}
+    </select>
+
+    <!--扩展方法-->
+    <select id="selectByEmail" parameterType="string" resultType="User">
+        select *
+        from travel1.user
+        where user.mail=#{mail};
+    </select>
+    <update id="changePasswd" parameterType="user" >
+        update travel1.user
+        set  password=#{password}
+        where id=#{id};
+    </update>
+
+
+
+</mapper>

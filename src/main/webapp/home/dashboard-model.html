@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta charset="utf-8" />
+		<!-- 新 Bootstrap4 核心 CSS 文件 -->
+		<link rel="stylesheet" href="extra/bootstrap4/css/bootstrap.min.css">
+
+		<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+		<script src="extra/jquery-3.3.1.min.js"></script>
+
+		<!-- popper.min.js 用于弹窗、提示、下拉菜单 -->
+		<script src="extra/popper.min.js"></script>
+
+		<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+		<script src="extra/bootstrap4/js/bootstrap.min.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="css/global.css" />
+		<link rel="stylesheet" type="text/css" href="css/dashboard.css" />
+		<title></title>
+	</head>
+	<body class="container-fluid">
+		<header class="navbar-block">
+			<nav class="navbar navbar-expand-sm navbar-dark bg-info">
+				<div class="container">
+
+
+					<!-- logo area -->
+					<a href="#" class="navbar-brand">
+						<!-- logo icon -->
+						<b>
+							<img src="img/logo.jpg" class="logo-img">
+						</b>
+
+						<!-- logo text -->
+						<span class="text-white d-none d-lg-inline">畅游 tour</span>
+					</a>
+
+
+					<!-- logo area end -->
+					<div class="dropdown col-3 offset-md-9 d-inline navbar-user ">
+						<span class="dropdown-toggle" data-toggle="dropdown">
+							<img src="img/wode.png" class="list-icon-img">
+							<span class="small text-light">用户中心</span>
+						</span>
+						<div class="dropdown-menu col-1">
+							<div class="dropdown-item card ">
+								<div class="col-12">
+									<img src="img/wode.png" class="user-icon">
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+
+					<!-- <button class="navbar-toggler border-0" data-toggle="collapse" data-target="#collapseNavbar1">
+					<img src="img/wode.png" class="list-icon-img">
+					<span class="small">用户中心</span>
+					</button>
+				<div class="collapse navbar-collapse" id="collapseNavbar1">
+					<ul class="navbar-nav text-right col-2 offset-10">
+						<li class="nav-item"><a class="nav-link" href="#">link1</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">link2</a></li>
+					</ul>
+				</div> -->
+
+				</div>
+			</nav>
+		</header>
+
+
+		<div class="row container mx-auto margin-0 ">
+			<aside class="col-3 text-left" id="aside-menu">
+				<div class="list-group ">
+					<a class="list-group-item list-group-item-action menu-1">
+						<span class="list-icon">
+							<img class="list-icon-img" src="img/shouye.png">
+						</span>
+						<span class="list-introduce d-none d-md-inline">首页</span>
+					</a>
+					<a class="list-group-item list-group-item-action menu-1 active" href="#aside-manage-block1" data-toggle="collapse">
+						<span class="list-icon"><img class="list-icon-img" src="img/fenlei.png"></span>
+						<span class="list-introduce d-none d-md-inline">管理</span>
+					</a>
+					<div id="aside-manage-block1" class="collapse">
+						<ul class="list-group">
+							<li class="list-group-item text-center"><span class="menu-2 offset-md-1"><img src="img/dizhi.png" class="list-icon-img" /></span>
+								<span class="d-none d-sm-inline">景点信息管理</span>
+							</li>
+							<li class="list-group-item text-center"><span class="menu-2 offset-md-1"><img src="img/dianzan.png" class="list-icon-img" /></span>
+								<span class="d-none d-sm-inline">评论信息管理</span>
+							</li>
+
+						</ul>
+					</div>
+
+
+					<a class="list-group-item list-group-item-action menu-1"><span class="list-icon"><img class="list-icon-img" src="img/shezhi.png"></span><span
+						 class="list-introduce d-none d-md-inline">设置</span></a>
+				</div>
+				<br>
+				<br>
+
+			</aside>
+
+			<div id="mainBlock" class="col-9 ">
+				
+			</div>
+			
+		</div>
+
+	<script type="text/javascript">
+		// $('#mainBlock').load('')
+	</script>
+	</body>
+</html>

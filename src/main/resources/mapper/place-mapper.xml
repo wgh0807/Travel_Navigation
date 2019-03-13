@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="place">
+    <insert id="insert" useGeneratedKeys="true" parameterType="place" keyProperty="id">
+        insert into travel1.place (id, city, name, cover_pic,`desc`, tel, web, tourtime, traffic, price, open_time, location, comment_num, longitude, latitude)
+        values (null,#{city},#{name},#{cover_pic},#{desc},#{tel},#{web},#{tourtime},#{traffic},#{price},#{open_time},#{location},#{comment_num},#{longitude},#{latitude});
+    </insert>
+
+    <delete id="delete" parameterType="place">
+        delete from travel1.place where id=#{id};
+    </delete>
+
+    <update id="update" parameterType="place">
+        update travel1.place
+        set city=#{city},
+            name=#{name},
+            cover_pic = #{cover_pic},
+            `desc`=#{desc},
+            tel=#{tel},
+            web=#{web},
+            tourtime=#{tourtime},
+            traffic = #{traffic},
+            price=#{price},
+            open_time=#{open_time},
+            location=#{location},
+            comment_num=#{comment_num},
+            location=#{longitude},
+            latitude=#{latitude}
+        where id=#{id};
+    </update>
+
+    <select id="selectOne" parameterType="int">
+        select *
+        from travel1.place
+        where id=#{id};
+    </select>
+
+    <select id="selectAll" resultType="place">
+        select * from travel1.place order by id;
+    </select>
+</mapper>
