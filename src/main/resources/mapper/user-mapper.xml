@@ -24,7 +24,7 @@
         FROM travel1.user
         ORDER BY id
     </select>
-    <select id="selectone" resultType="user">
+    <select id="selectOne" resultType="user">
         SELECT *
         FROM travel1.user
         WHERE user.id = #{id}

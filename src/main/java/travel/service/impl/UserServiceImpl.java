@@ -18,8 +18,14 @@ public class UserServiceImpl extends GenericServiceImpl<User,Integer> implements
     private StrongPasswordEncryptor spe = new StrongPasswordEncryptor();
     @Override
     public User signIn(User user) {
-        User trueUser = genericDao.queryOne(user.getId());
+        System.out.println("user service Impl -> signIn");
+        User trueUser = genericDao.queryOne("selectByEmail",user.getMail());
+        System.out.println("true user : "+trueUser);
+        if (trueUser == null) {
+            return null;
+        }
         boolean result = spe.checkPassword(user.getPassword(), trueUser.getPassword());
+//        boolean result = user.getPassword().equals(trueUser.getPassword());
         if (result) {
             return trueUser;
         }

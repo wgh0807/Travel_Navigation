@@ -9,85 +9,25 @@ signInBtn = document.getElementById('signInBtn')
 signUpBtn = document.getElementById('signUpBtn')
 
 
-
-window.onload=function(){
-	// console.log("page on load")
-	// todo: ajax获取session中的errTime
-
-    
-	
-}
-window.onbeforeunload=function(){
-	// todo: ajax上传更新session中的errTime
-	
-	// return '..'
-}
-
-// 点击‘立刻注册’时的动画效果
-jump2signUp.onclick = function() {
-	brand.classList.remove('brand-jump')
-	brand.classList.add('brand-jump-back')
-
-	signIn.classList.remove('block-show')
-	signIn.classList.add('block-hide')
-	setTimeout(function() {
-		signUp.style.display = ''
-		signUp.classList.remove('block-hide')
-		signUp.classList.add('block-show')
-		signIn.style.display = 'none'
-	}, 300)
-}
-
-// 点击‘返回登陆’时的动画效果
-jump2signIn.onclick = function() {
-	brand.classList.remove("brand-jump-back")
-	brand.classList.add('brand-jump')
-
-	signUp.classList.remove('block-show')
-	signUp.classList.add('block-hide')
-	setTimeout(function() {
-		signIn.style.display = ''
-		signIn.classList.remove('block-hide')
-		signIn.classList.add('block-show')
-		signUp.style.display = 'none'
-	}, 300)
-
-}
-
 // input输入框
 // sign In 部分
-signInEmail = document.getElementById("username")
+signInEmail = document.getElementById("email")
 signInPassword = document.getElementById('password')
-rebotCheckInput = document.getElementById('rebotCheckInput')
+robotCheckInput = document.getElementById('robotCheckInput')
+tokenImg = document.getElementById("token-img");
+robotCheckArea = document.getElementById('robotCheckArea')
 // sign Up 部分
 signUpName = document.getElementById("name")
 signUpPassword = document.getElementById("passwd")
 signUpWdsub = document.getElementById("wdsub")
 signUpMail = document.getElementById("mail")
 signUpToken = document.getElementById("token")
-robotCheckArea = document.getElementById('robotCheckArea')
 
 // 其他变量
 time = 60;
-errTime=0;
-isSame=0;
-
-// 发送验证码部分
-sendtokenBtn.onclick = function() {
-	if(signUpMail.value.length <1 ){
-        signUpMail.classList.add("border-danger");
-        alert("请输入邮箱");
-		setTimeout('signUpMail.classList.remove("border-danger")',1000)
-	}else{
-		// todo: ajax向服务器请求发送验证码
-		
-		
-		sendtokenBtn.innerHTML = '已发送';
-        sendtokenBtn.classList.add('disabled');
-		timeInterval1 = setInterval(TimeJump,100);
-		alert('我们已经向您邮箱发送了验证码，请注意查收')
-	}
-}
+errTime = 0;
+isSame = 0;
+mailExist = 1;
 
 // 表单和错误信息框
 signInForm = document.getElementById("signInForm");
@@ -95,86 +35,275 @@ signUpForm = document.getElementById("signUpForm");
 signInInfo = document.getElementById("info");
 signUpInfo = document.getElementById("info2");
 
+
+window.onload = function () {
+    // console.log("page on load")
+    signInEmail.value = "";
+    signInPassword.value = "";
+    robotCheckInput.value = "";
+
+    //  ajax获取session中的errTime
+    $.ajax({
+        url: "user/getErrTime",
+        type: "POST",
+        data: {},
+        success: function (data, state) {
+            console.log(state);
+            errTime = data.errTime;
+            console.log("errTime", errTime);
+
+            if (data.errTime >= 3) {
+                robotCheckArea.classList.remove("d-none");
+                tokenImg.innerText = data.token;
+                robotCheckInput.required = true
+            }
+        },
+        error: function (state, msg) {
+            console.log(state, msg);
+            errTime = 0
+        }
+    })
+
+}
+window.onbeforeunload = function () {
+    //  ajax上传更新session中的errTime
+    $.ajax({
+        url: "user/setErrTime",
+        type: "POST",
+        data: {"errTime": errTime},
+        success: function (data, state) {
+            console.log(data)
+        },
+        error: function (state) {
+            console.log(state)
+        }
+    })
+};
+
+// 点击‘立刻注册’时的动画效果
+jump2signUp.onclick = function () {
+    brand.classList.remove('brand-jump');
+    brand.classList.add('brand-jump-back');
+
+    signIn.classList.remove('block-show');
+    signIn.classList.add('block-hide');
+    setTimeout(function () {
+        signUp.style.display = '';
+        signUp.classList.remove('block-hide');
+        signUp.classList.add('block-show');
+        signIn.style.display = 'none'
+    }, 300)
+};
+
+// 点击‘返回登陆’时的动画效果
+jump2signIn.onclick = function () {
+    brand.classList.remove("brand-jump-back");
+    brand.classList.add('brand-jump');
+
+    signUp.classList.remove('block-show');
+    signUp.classList.add('block-hide');
+    setTimeout(function () {
+        signIn.style.display = '';
+        signIn.classList.remove('block-hide');
+        signIn.classList.add('block-show');
+        signUp.style.display = 'none'
+    }, 300)
+};
+
+
+// 发送验证码部分
+sendtokenBtn.onclick = function () {
+    if (signUpMail.value.length < 1) {
+        signUpMail.classList.add("border-danger");
+        alert("请输入邮箱");
+        setTimeout('signUpMail.classList.remove("border-danger")', 1000)
+    } else if (mailExist == 1) {
+        alert("邮箱已存在！");
+        return ;
+    } else {
+        // todo: ajax向服务器请求发送邮箱验证码
+        $.ajax({
+            url: "user/sendEmailToken",
+            type: "POST",
+            data: {
+                "mail": signUpMail.value
+            },
+            success: function (data, status) {
+                //    发送成功
+                sendtokenBtn.innerHTML = '已发送';
+                sendtokenBtn.classList.add('disabled');
+                timeInterval1 = setInterval(TimeJump, 1000);
+                alert('我们已经向您邮箱发送了验证码，请注意查收')
+            },
+            error: function (status) {
+                //    网络问题，发送失败
+                alert("您的网络不给力哦")
+            }
+        })
+    }
+};
+
 // signIn表单提交时事件
 signInForm.onsubmit = function () {
     console.log("signIn form submit");
-	
-	
-	// ajax 登陆
-	
-	// 获取结果
-	
-	// 成功时
-	
-	// 报错时
-	signInInfo.innerText="用户名或密码错误"
-	signInInfo.classList.remove("d-none")
-	
-	errTime = errTime + 1
-	if (errTime == 3) {
-	    rebotCheckInput.value = ""
-	}
-	if (errTime > 2) {
-	    robotCheckArea.classList.remove("d-none");
-	    rebotCheckInput.required = true
-	}
+    // ajax 登陆
+    $.ajax({
+        url: "user/signIn",
+        type: "POST",
+        data: {
+            "errT": errTime,
+            "mail": signInEmail.value,
+            "password": signInPassword.value,
+            "robotCheckInput": robotCheckInput.value
+        },
+        // 获取结果
+
+        success: function (data, state) {
+            console.log(data, state)
+            // 成功时
+            if (data.result == "success") {
+                window.location.href = data.nextSite;
+            } else {
+                // 报错时
+                signInInfo.innerText = data.message
+                signInInfo.classList.remove("d-none")
+
+                errTime = data.errTime
+
+                if (data.errTime >= 3) {
+                    robotCheckArea.classList.remove("d-none");
+                    tokenImg.innerText = data.token;
+                    robotCheckInput.required = true
+                }
+            }
+        },
+        error: function () {
+            alert("网络不给力哦")
+        }
+    });
 }
 
 // 注册表单提交时事件
 signUpForm.onsubmit = function () {
-    console.log("signUp form submit")
-	if(isSame==1){
-		// ajax 注册
-		// 获取结果
-		// 成功情况
-		// 失败情况
-		signUpInfo.innerText="注册失败"
-		signUpInfo.classList.remove("d-none")
-		
-		
-	}else{
-		// 注册页两次密码不一致。
-	}
-}
+    console.log("signUp form submit");
 
-// 点击登陆按钮，监控错误次数，适时提供验证码功能
-signInBtn.onclick = function () {
-	signInInfo.classList.add("d-none")
-	signInInfo.innerText = ""
+    signUpInfo.innerText = "";
+    signUpInfo.classList.add("d-none");
+    signUpInfo.classList.remove("text-success");
+    signUpInfo.classList.remove("text-danger");
 
-    errTime = errTime + 1
-    if (errTime == 3) {
-        rebotCheckInput.value = ""
-    }
-    if (errTime > 2) {
-        robotCheckArea.classList.remove("d-none");
-        rebotCheckInput.required = true
+    if (isSame == 1) {
+        // ajax 注册
+        $.ajax({
+            url: "user/signUp",
+            type: "POST",
+            data: {
+                "name": signUpName.value,
+                "password": signUpPassword.value,
+                "mail": signUpMail.value,
+                "emailToken": signUpToken.value
+            },
+            success: function (data, state) {
+                // 获取结果
+                if (data.result == "success") {
+                    //    注册成功
+                    signUpInfo.innerText = "注册成功！";
+                    signUpInfo.classList.add("text-success");
+
+                    signUpPassword.value = "";
+                    signUpWdsub.value = "";
+
+                    setTimeout(jump2signIn.click(), 1000)
+                } else {
+                    //    注册失败
+                    signUpInfo.innerText = "注册失败! " + data.message;
+                    signUpInfo.classList.add("text-danger");
+                }
+            },
+            error: function () {
+                alert("您的网络不给力哦");
+                signUpInfo.innerText = "注册失败! ";
+                signUpInfo.classList.add("text-danger");
+            }
+        });
+        signUpInfo.classList.remove("d-none")
+
+
+    } else {
+        // 注册页两次密码不一致。
+        signUpInfo.innerText = "两次密码输入不一致";
+        signUpInfo.classList.add("text-danger");
+        signUpInfo.classList.remove("d-none");
     }
 };
 
-signUpBtn.onclick = function(){
-	signUpInfo.classList.add("d-none")
-	signUpInfo.innerText = ""
-}
+// 点击登陆按钮，监控错误次数，适时提供验证码功能
+signInBtn.onclick = function () {
+    signInInfo.classList.add("d-none");
+    signInInfo.innerText = "";
 
+    errTime = errTime + 1;
+    // if (errTime == 3) {
+    //     robotCheckInput.value = ""
+    // }
+    // if (errTime > 2) {
+    //     robotCheckArea.classList.remove("d-none");
+    //     robotCheckInput.required = true
+    // }
+};
+
+//注册页面邮箱输入框失去焦点自动判断是否已经注册
+signUpMail.onblur = function () {
+    signUpInfo.classList.add("d-none")
+    signUpInfo.classList.remove("text-success");
+    signUpInfo.classList.remove("text-danger");
+    mailBlock = this;
+    if (mailBlock.value.length > 0) {
+        $.ajax({
+            url: "user/emailCheck",
+            type: "POST",
+            data: {
+                "email": mailBlock.value
+            },
+            success: function (data) {
+                if (data.exist) {
+                    //已注册
+                    signUpInfo.innerText = "该邮箱已注册！";
+                    signUpInfo.classList.add("text-danger");
+                    mailExist = 1;
+                } else {
+                    //未注册
+                    signUpInfo.innerText = "该邮箱未注册！";
+                    signUpInfo.classList.add("text-success");
+                    mailExist = 0;
+                }
+                signUpInfo.classList.remove('d-none')
+            }
+        })
+    }
+};
+
+signUpBtn.onclick = function () {
+//    todo 忘了要做啥，先留着
+};
 
 PasswdLockAreas = document.getElementsByClassName("lockedArea")
-for (var i in PasswdLockAreas){
-	PasswdLockAreas[i].onclick=lockOrUnlock
+for (var i in PasswdLockAreas) {
+    PasswdLockAreas[i].onclick = lockOrUnlock
 }
 
-function lockOrUnlock(){
-	
-	console.log(this,this.getAttribute("data-target"))
-	targetId = this.getAttribute("data-target")
-	targetElement = document.getElementById(targetId)
-	if(targetElement.type == "password"){
-		targetElement.type = "text"
-		this.classList.add("unlocked")
-	}else{
-		targetElement.type = "password"
-		this.classList.remove("unlocked")
-	}
+function lockOrUnlock() {
+
+    console.log(this, this.getAttribute("data-target"))
+    targetId = this.getAttribute("data-target")
+    targetElement = document.getElementById(targetId)
+    if (targetElement.type == "password") {
+        targetElement.type = "text"
+        this.classList.add("unlocked")
+    } else {
+        targetElement.type = "password"
+        this.classList.remove("unlocked")
+    }
 }
 
 // 注册页面 密码输入框失去焦点，调用自动检测方法
@@ -183,39 +312,39 @@ signUpPassword.onblur = passwdAndWdsubCheck;
 
 // 定义方法区
 // 注册：密码和确定密码失去焦点时自动判断是否相同
-function passwdAndWdsubCheck () {
-	signUpInfo.classList.add("d-none")
-	signUpInfo.innerText=""
-	signUpBtn.classList.remove("disabled")
-	
-	console.log("blur action")
-	console.log(signUpPassword.value.length)
-	if(signUpPassword.value.length<6){
-		signUpInfo.classList.remove("d-none")
-		signUpInfo.innerText="密码长度过短"
-		signUpBtn.classList.add("disabled")
-		isSame=0;
-	}else if (signUpWdsub.value != signUpPassword.value) {
+function passwdAndWdsubCheck() {
+    signUpInfo.classList.add("d-none")
+    signUpInfo.innerText = ""
+    signUpBtn.classList.remove("disabled")
+
+    console.log("blur action")
+    console.log(signUpPassword.value.length)
+    if (signUpPassword.value.length < 6) {
         signUpInfo.classList.remove("d-none")
-		signUpInfo.innerText="两次密码输入不一致"
-		signUpBtn.classList.add("disabled")
-		isSame=0;
-    }else{
-		isSame=1;
-	}
+        signUpInfo.innerText = "密码长度过短"
+        signUpBtn.classList.add("disabled")
+        isSame = 0;
+    } else if (signUpWdsub.value != signUpPassword.value) {
+        signUpInfo.classList.remove("d-none")
+        signUpInfo.innerText = "两次密码输入不一致"
+        signUpBtn.classList.add("disabled")
+        isSame = 0;
+    } else {
+        isSame = 1;
+    }
 };
 
 // 发送验证码计时函数
-function TimeJump(){
-	time=time-1;
-	if (time == 0) {
-		time = 60;
+function TimeJump() {
+    time = time - 1;
+    if (time == 0) {
+        time = 60;
         sendtokenBtn.classList.remove('disabled');
         sendtokenBtn.innerText = "重新发送";
-		clearInterval(timeInterval1);
-	} else{
-		sendtokenBtn.innerText = '重新发送('+time+')';
-	}
+        clearInterval(timeInterval1);
+    } else {
+        sendtokenBtn.innerText = '重新发送(' + time + ')';
+    }
 }
 
 

@@ -133,9 +133,20 @@ input[type=button] {
 	position: absolute;
 	right: 1rem;
 }
-#token-img{
+.token-img{
 	height: 2rem;
+	width: 5rem;
 	display: inline-block;
+}
+
+#token-img{
+
+}
+
+#token-img2{
+	/*position: absolute;*/
+	/*left: 0rem;*/
+	/*top: 0rem;*/
 }
 
 #signInPasswdLockArea{

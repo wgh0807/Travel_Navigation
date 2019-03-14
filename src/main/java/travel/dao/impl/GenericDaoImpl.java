@@ -53,7 +53,7 @@ public abstract class GenericDaoImpl<T extends Serializable,ID extends Number> i
 
     @Override
     public T queryOne(ID id) {
-        return queryOne(getStatement("selectOne"),id);
+        return queryOne("selectOne",id);
     }
 
     @Override

@@ -29,8 +29,8 @@
 					<div id="signInInner" class="innerBlock col-md-10 text-center offset-md-1">
 						<p>用户登陆</p>
 						<form class="form-group" action="javascript:void(0)" method="post" id="signInForm">
-							<label for="username" class="introduce">邮箱</label>
-							<input type="email" class="form-control" name="username" id="username" placeholder="邮箱" required autofocus />
+							<label for="email" class="introduce">邮箱</label>
+							<input type="email" class="form-control" name="email" id="email" placeholder="邮箱" required autofocus />
 							<label for="password" class="introduce">
 								密码
 								<a class="text-info" id="forgetPassword" href="#">忘记密码？</a>
@@ -43,9 +43,13 @@
 
 
 							<div id="robotCheckArea" class="d-none">
-								<label for="rebotCheckInput" class="introduce">验证码</label>
-								<div class=" col-6 " id="token-img-area"><img src="img/tokenimg.png" id="token-img"><a href="#"><small>换一张？</small></a></div>
-								<input type="text" maxlength="6" class="form-control col-6 " id="rebotCheckInput" name="robotCheck" value="0"
+								<label for="robotCheckInput" class="introduce">验证码</label>
+								<div class=" col-6 " id="token-img-area">
+									<div class=" w-100 h-100 token-img" style="position: absolute;" id="token-img2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+									<div class="bg-light disabled w-75 token-img" id="token-img"></div>
+
+								</div>
+								<input type="text" maxlength="6" class="form-control col-6 " id="robotCheckInput" name="robotCheck"
 								 placeholder="验证码" />
 
 							</div>

@@ -11,6 +11,7 @@
     <title>Title</title>
 </head>
 <body>
+123
 <%
     out.print(session.getAttribute("user"));
 %>
