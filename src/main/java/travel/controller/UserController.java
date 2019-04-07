@@ -12,6 +12,7 @@ import travel.service.UserService;
 import travel.util.Pagination;
 import travel.util.TokenGenerator;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -173,12 +174,12 @@ public class UserController extends BaseController {
     public Map signUp(User user,String emailToken) {
         System.out.println("\n\nsignUp model");
         System.out.println("data : user = "+user+"emailToken : "+emailToken);
-        user.setMail(user.getMail().toLowerCase());
+        user.setMail(user.getMail().toLowerCase().trim());
 
 
         Map message = new HashMap<>();
 
-        System.out.println("token check resule is "+session.getAttribute(user.getMail()) == null || !((String)session.getAttribute(user.getMail())).equalsIgnoreCase(emailToken));
+        System.out.println("token check resule is "+user.getMail()+session.getAttribute(user.getMail())+(session.getAttribute(user.getMail()) == null || !((String)session.getAttribute(user.getMail())).equalsIgnoreCase(emailToken)));
         System.out.println("signUp model begin");
         if (session.getAttribute(user.getMail()) == null || !((String)session.getAttribute(user.getMail())).equalsIgnoreCase(emailToken)) {
             message.put("result", "fail");
@@ -214,7 +215,7 @@ public class UserController extends BaseController {
     @ResponseBody
     public Map emailCheck(@RequestParam String email){
         Map message = new HashMap();
-        email = email.toLowerCase();
+        email = email.toLowerCase().trim();
         int result = userService.emailCheck(email);
         message.put("exist", (result == 1) ? Boolean.TRUE : Boolean.FALSE);
         return message;
@@ -237,43 +238,65 @@ public class UserController extends BaseController {
         return message;
     }
 
+    @RequestMapping("currentUser")
+    @ResponseBody
+    public Map getCurrentUser() {
+        Map data = new HashMap();
+
+        data.put("currentUser", session.getAttribute("user"));
+
+        return data;
+
+    }
 
     @RequestMapping(value = "sendEmailToken",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     public Map sendEmailToken(@RequestParam String mail) {
-        mail = mail.toLowerCase();
+        mail = mail.toLowerCase().trim();
         Map message = new HashMap();
-//        todo: 先自动生成邮箱验证码 token ,然后调用 sendTokenByEmail 方法向用户发送邮件
+//      先自动生成邮箱验证码 token ,然后调用 sendTokenByEmail 方法向用户发送邮件
         String token = TokenGenerator.emailToken();
 //        将验证码放入session中，创建时间线程，15分钟后删除emailToken
         System.out.println("\n\nsendTokenByEmail\n mail : "+mail+"\n emailToken:"+token);
         session.setAttribute(mail, token);
+        System.out.println("set mail :"+mail+" token :"+token);
         System.out.println("next step sendTokenByEmail");
-        sendTokenByEmail(mail,token);
-        System.out.println("welcome to back");
-
         try {
-            final Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    session.removeAttribute("emailToken");
-                    System.out.println("邮箱验证码 已发送，token = "+token);
-                    timer.cancel();
-                }
-            },15*60*1000);
+            sendTokenByEmail(mail,token);
+            message.put("result", "success");
+            message.put("sendStatus","验证码已发送,有效期15分钟");
         } catch (Exception e) {
-            e.printStackTrace();
+            message.put("result", "fail");
+            message.put("sendStatus", "邮箱不存在，请检查");
         }
 
-        message.put("sendStatus","验证码已发送,有效期15分钟");
+        System.out.println("welcome to back");
+
+//todo 验证码超时过期
+//        try {
+//            final Timer timer = new Timer();
+//            timer.schedule(new TimerTask() {
+//                String email = ;
+//                @Override
+//                public void run() {
+//                    session.removeAttribute(email);
+//                    System.out.println("邮箱验证码 已清理，token = "+token);
+//                    timer.cancel();
+//                }
+//            },15*60*1000);
+//        } catch (Exception e) {
+////            e.printStackTrace();
+//
+//        }
+
+
         return message;
 
     }
 
 //其他方法，不直接参与服务
 //    发送邮箱验证码
-    public void sendTokenByEmail(String targetMailAddress,String token){
+    public void sendTokenByEmail(String targetMailAddress,String token) throws MessagingException {
         Mail mail = new Mail();
         mail.setFromAddress("mail@wgh0807.cn");
         mail.setToAddress(targetMailAddress);

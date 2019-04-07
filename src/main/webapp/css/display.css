@@ -1,0 +1,32 @@
+
+.table-Bottom-0{
+	margin-bottom: 0;
+}
+
+#table-control-bar{
+	padding: 0rem;
+	margin-bottom: 0.5rem;
+	margin-top: 0.5rem;
+}
+
+#page-bar{
+	margin: 0,auto;
+}
+
+td{
+	min-width: 5rem;
+	max-width: 12.5rem;
+}
+#td-chk{
+	min-width: 1.25rem;
+}
+
+#operation{
+	min-width: 10rem;
+}
+#create-modal-block > div{
+	margin-top: 0.3125rem;
+}
+#create-modal-block > div > label{
+	margin-bottom: 0;
+}

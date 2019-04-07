@@ -32,7 +32,12 @@ public class MailController extends BaseController {
         mail.setToAddress("liangkangfa@qq.com;");
         mail.setSubject("测试邮件标题");
         mail.setContent("测试邮件内容");
-        mailService.sendAttachMail(mail);
+        try {
+
+            mailService.sendAttachMail(mail);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Map message = new HashMap();
         message.put("state", "success");

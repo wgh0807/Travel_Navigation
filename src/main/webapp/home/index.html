@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆结果检查</title>
+	
+	
+	<div id="resultDisplay">
+		
+	</div>
+
+    <script src="../extra/jquery-3.3.1.min.js"></script>
+    <script src="../js/global.js"></script>
+
+</head>
+<body>
+<script>
+
+    //    todo 测试session是否保存成功
+
+    $.ajax({
+        url: serverAddress+"user/currentUser",
+        type: "POST",
+        xhrFields:{
+            withCredentials:true
+        },
+        data: {},
+        success: function (data, state) {
+            console.log("成功"+data);
+            console.log(data);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log("失败",XMLHttpRequest, "\n",textStatus,"\n", errorThrown);
+        }
+    })
+	
+	setInterval(function(){
+		 window.location = "placeManage.html"
+	},1000)
+	
+	
+	
+	
+</script>
+</body>
+</html>

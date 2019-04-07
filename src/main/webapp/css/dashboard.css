@@ -49,12 +49,15 @@
 }
 
 .list-group-item.active{
-	background-color: #FFF3CD;
-	border-color: #FFF3CD;
+	
 }
 
+#mainBlock{
+	margin-top: 0.5rem;
+	padding:0.2rem;
+}
 
-@media screen and (min-width:500px) {
+@media screen and (min-width:700px) {
 	.menu-1{
 		text-align: left;
 	}
@@ -67,3 +70,4 @@
 		padding: 0;
 	}
 }
+

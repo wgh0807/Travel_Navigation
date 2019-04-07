@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta charset="utf-8" />
+		<!-- 新 Bootstrap4 核心 CSS 文件 -->
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+  
+		<script src="../extra/jquery-3.3.1.min.js"></script>
+		<script src="../js/global.js"></script>
+
+		<!-- popper.min.js 用于弹窗、提示、下拉菜单 -->
+		<script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+
+		<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script> 
+		<title></title>
+	</head>
+	<body>
+		<div class="contailer">
+			
+		</div>
+	</body>
+	
+	<script type="text/javascript">
+		
+		var mycars = new Array()
+		mycars[0] = 1
+		mycars[1] = 8
+		mycars[2] = 5
+		 $.ajax({
+		    url: serverAddress+"place/routePlan",
+		    type: "POST",
+		    xhrFields:{
+		        withCredentials:true
+		    },
+		    data: {
+				place1:4,
+				place2:9,
+				place3:32,
+				place4:65,
+			},
+		    success: function (data, state) {
+		        console.log("成功"+data);
+		        console.log(data);
+		    },
+		    error: function (XMLHttpRequest, textStatus, errorThrown) {
+		        console.log("失败",XMLHttpRequest, "\n",textStatus,"\n", errorThrown);
+		    }
+		})
+	</script>
+</html>

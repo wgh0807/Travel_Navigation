@@ -1,3 +1,7 @@
+document.write("<script language=javascript src='js/global.js'></script>");
+
+
+
 brand = document.getElementById('brand')
 signIn = document.getElementById('signIn')
 signUp = document.getElementById('signUp')
@@ -33,6 +37,10 @@ mailExist = 1;
 signInForm = document.getElementById("signInForm");
 signUpForm = document.getElementById("signUpForm");
 signInInfo = document.getElementById("info");
+
+// serverAddress = "http://127.0.0.1:8080/";
+
+
 signUpInfo = document.getElementById("info2");
 
 
@@ -44,8 +52,11 @@ window.onload = function () {
 
     //  ajax获取session中的errTime
     $.ajax({
-        url: "user/getErrTime",
+        url: serverAddress+"user/getErrTime",
         type: "POST",
+        xhrFields:{
+            withCredentials:true
+        },
         data: {},
         success: function (data, state) {
             console.log(state);
@@ -68,8 +79,11 @@ window.onload = function () {
 window.onbeforeunload = function () {
     //  ajax上传更新session中的errTime
     $.ajax({
-        url: "user/setErrTime",
+        url: serverAddress+"user/setErrTime",
         type: "POST",
+        xhrFields:{
+            withCredentials:true
+        },
         data: {"errTime": errTime},
         success: function (data, state) {
             console.log(data)
@@ -123,17 +137,26 @@ sendtokenBtn.onclick = function () {
     } else {
         // todo: ajax向服务器请求发送邮箱验证码
         $.ajax({
-            url: "user/sendEmailToken",
+            url: serverAddress+"user/sendEmailToken",
             type: "POST",
+            xhrFields:{
+                withCredentials:true
+            },
             data: {
                 "mail": signUpMail.value
             },
             success: function (data, status) {
+                console.log(data)
                 //    发送成功
-                sendtokenBtn.innerHTML = '已发送';
-                sendtokenBtn.classList.add('disabled');
-                timeInterval1 = setInterval(TimeJump, 1000);
-                alert('我们已经向您邮箱发送了验证码，请注意查收')
+                if(data.result=="success"){
+                    sendtokenBtn.innerHTML = '已发送';
+                    sendtokenBtn.classList.add('disabled');
+                    timeInterval1 = setInterval(TimeJump, 1000);
+                    alert("发送成功。"+data.sendStatus)
+                }else{
+                    alert("发送失败。"+data.sendStatus)
+                }
+
             },
             error: function (status) {
                 //    网络问题，发送失败
@@ -148,8 +171,11 @@ signInForm.onsubmit = function () {
     console.log("signIn form submit");
     // ajax 登陆
     $.ajax({
-        url: "user/signIn",
+        url: serverAddress+"user/signIn",
         type: "POST",
+        xhrFields:{
+            withCredentials:true
+        },
         data: {
             "errT": errTime,
             "mail": signInEmail.value,
@@ -162,7 +188,24 @@ signInForm.onsubmit = function () {
             console.log(data, state)
             // 成功时
             if (data.result == "success") {
-                window.location.href = data.nextSite;
+                //    todo 测试session是否保存成功
+                $.ajax({
+                    url: serverAddress+"user/currentUser",
+                    type: "POST",
+                    xhrFields:{
+                        withCredentials:true
+                    },
+                    data: {},
+                    success: function (data, state) {
+                        console.log(data);
+                    },
+                    error: function (state, msg) {
+                        console.log(state, msg);
+                    }
+                })
+
+                setTimeout(window.location.href = data.nextSite, 1000);
+
             } else {
                 // 报错时
                 signInInfo.innerText = data.message
@@ -195,8 +238,11 @@ signUpForm.onsubmit = function () {
     if (isSame == 1) {
         // ajax 注册
         $.ajax({
-            url: "user/signUp",
+            url: serverAddress+"user/signUp",
             type: "POST",
+            xhrFields:{
+                withCredentials:true
+            },
             data: {
                 "name": signUpName.value,
                 "password": signUpPassword.value,
@@ -214,6 +260,8 @@ signUpForm.onsubmit = function () {
                     signUpWdsub.value = "";
 
                     setTimeout(jump2signIn.click(), 1000)
+
+
                 } else {
                     //    注册失败
                     signUpInfo.innerText = "注册失败! " + data.message;
@@ -227,8 +275,6 @@ signUpForm.onsubmit = function () {
             }
         });
         signUpInfo.classList.remove("d-none")
-
-
     } else {
         // 注册页两次密码不一致。
         signUpInfo.innerText = "两次密码输入不一致";
@@ -260,8 +306,11 @@ signUpMail.onblur = function () {
     mailBlock = this;
     if (mailBlock.value.length > 0) {
         $.ajax({
-            url: "user/emailCheck",
+            url: serverAddress+"user/emailCheck",
             type: "POST",
+            xhrFields:{
+                withCredentials:true
+            },
             data: {
                 "email": mailBlock.value
             },

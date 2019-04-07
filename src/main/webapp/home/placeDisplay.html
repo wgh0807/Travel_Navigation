@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta charset="utf-8" />
+		<!-- 新 Bootstrap4 核心 CSS 文件 -->
+		<link rel="stylesheet" href="../extra/bootstrap4/css/bootstrap.min.css">
+
+		<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+		<script src="../extra/jquery-3.3.1.min.js"></script>
+
+		<!-- popper.min.js 用于弹窗、提示、下拉菜单 -->
+		<script src="../extra/popper.min.js"></script>
+
+		<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+		<script src="../extra/bootstrap4/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/display.css" />
+		<title></title>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<table id="displayTable" class="table table-bordered table-hover table-striped table-responsive table-Bottom-0">
+				<thead class="thead-light">
+					<tr id="thead">
+						<th> </th>
+						<th>id </th>
+						<th>城市 </th>
+						<th>名称 </th>
+						<th>封面 </th>
+						<th>描述 </th>
+						<th>详情图片 </th>
+						<th>电话 </th>
+						<th>网站 </th>
+						<th>时长 </th>
+						<th>交通 </th>
+						<th>价格 </th>
+						<th>开放时间 </th>
+						<th>地址 </th>
+						<th>评论数 </th>
+						<th>经度 </th>
+						<th>纬度 </th>
+						<th>状态 </th>
+						<th id="operation">操作 </th>
+					</tr>
+				</thead>
+				<tbody id="displayTbody">
+					<!-- dataId 在js中替换为真正信息的id -->
+					<tr class="dataRow" id="dataId">
+						<td id="td-chk"><input type="checkbox" data-target-id="dataid"> </td>
+						<td>id </td>
+						<td>city </td>
+						<td>name </td>
+						<td>cover_pic </td>
+						<td>desc </td>
+						<td>detail_Pic </td>
+						<td>tel </td>
+						<td>web </td>
+						<td>tourtime </td>
+						<td>traffic </td>
+						<td>price </td>
+						<td>open_time </td>
+						<td>location </td>
+						<td>comment_num </td>
+						<td>longitude </td>
+						<td>latitude </td>
+						<td>state </td>
+						<td><button data-target-id="dataid" class="btn btn-light" data-toggle="modal" data-target="#modal-edit">修改</button>&nbsp;
+							<button data-target-id="dataid" class="btn btn-light" data-toggle="modal" data-target="#modal-delete-one">删除</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div id="table-control-bar" class="btn-group col-12">
+				<button type="button" class="btn btn-sm btn-light" data-toggle="modal" data-target="#modal-create">新建</button>
+				<button type="button" class="btn btn-sm btn-light" data-toggle="modal" data-target="#modal-mult-delete">批量删除</button>
+				<div class="btn btn-light disabled col-10">&nbsp;</div>
+			</div>
+
+			<ul class="pagination table-responsive-sm col-lg-6 offset-lg-3" id="page-bar">
+				<li class="page-item">
+					<a href="#" class="page-link">
+						<span>
+							&lt;
+						</span>
+					</a>
+				</li>
+				<li class="page-item active"><a href="#" class="page-link">1</a> </li>
+				<li class="page-item"><a href="#" class="page-link">2</a> </li>
+				<li class="page-item"><a href="#" class="page-link">3</a> </li>
+				<li class="page-item"><a href="#" class="page-link">4</a> </li>
+				<li class="page-item"><a href="#" class="page-link">5</a> </li>
+				<li class="page-item"><a href="#" class="page-link"><span>&gt;</span></a></li>
+				<li class="page-item d-none d-md-block "><a href="javascript:void(0)" class="page-link disabled">共x页</a></li>
+				<li class="page-item d-none d-md-block "><a href="javascript:void(0)" class="page-link disabled">共x条</a></li>
+
+			</ul>
+
+
+			<!-- 模态框 -->
+			<!-- 创建 -->
+			<div id="modal-create" class="modal fade">
+				<div class="modal-dialog ">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">创建</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<form class="form-group">
+							<div class="modal-body" id="create-modal-block">
+								<!-- 创建 -->
+								<div class="col-sm-5 d-inline-block" >
+									<label>城市</label>
+									<input type="text" class="form-control" name="city" id="create-city" placeholder="城市" required />
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>名称 </label>
+									<input type="text" class="form-control" name="name" id="create-name" placeholder="" required />
+								</div>
+								
+								<div class="col-sm-5 d-inline-block">
+									<label>封面 </label>
+									<input type="text" class="form-control" name="cover_pic" id="create-coverPic" placeholder="default.png" value="default.png" readonly />
+									<!-- <input type="file" name="cover_pic" id="create-coverPic"/> -->
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>描述 </label>
+									<input type="text" class="form-control" name="desc" id="create-desc" placeholder="描述" />
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>详情图片 </label>
+									<input type="text" class="form-control" name="detail_Pic" id="create-detailPic" placeholder="" readonly />
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>电话 </label>
+									<input type="text" class="form-control" name="tel" id="create-tel" placeholder="" />
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>网站 </label>
+									<input type="text" class="form-control" name="web" id="create-web" placeholder="" />
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>时长 </label>
+									<input type="text" class="form-control" name="tourtime" id="create-time" placeholder="" />
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>交通 </label>
+									<input type="text" class="form-control" name="traffic" id="create-traffic" placeholder="" />
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>价格 </label>
+									<input type="text" class="form-control" name="price" id="create-price" placeholder="" />
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>开放时间 </label>
+									<input type="text" class="form-control" name="open_time" id="create-opentime" placeholder="" />
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>地址 </label>
+									<input type="text" class="form-control" name="location" id="create-address" placeholder="eg:天津市西青区津静路26号" />
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>经度 </label>
+									<input type="text" class="form-control" name="longitude" id="create-longitude" placeholder="0" />
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>纬度 </label>
+									<input type="text" class="form-control" name="latitude" id="create-latitude" placeholder="0" />
+								</div>
+								<div class="col-sm-5 d-inline-block">
+									<label>状态 </label>
+									<select name="state" id="create-state">
+										<option value="0" selected="selected">未开放</option>
+										<option value="1">已开放</option>
+										<option value="2">状态异常</option>
+									</select>
+								</div>
+								<!-- <label>评论数 </label> -->
+								<input type="text" class="form-control" name="comment_num" id="create-commentnum" placeholder="" hidden="hidden" value="0" />
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-info" id="create-save">保存</button>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+							</div>
+						</form>
+
+					</div>
+				</div>
+			</div>
+			<!-- 修改 -->
+			<div id="modal-edit" class="modal fade">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">修改</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<form class="form-group">
+						<div class="modal-body">
+							<!-- 修改 -->
+							<div class="col-sm-5 d-inline-block" >
+								<label>城市</label>
+								<input type="text" class="form-control" name="city" id="edit-city" placeholder="城市" required />
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>名称 </label>
+								<input type="text" class="form-control" name="name" id="edit-name" placeholder="" required />
+							</div>
+							
+							<div class="col-sm-5 d-inline-block">
+								<label>封面 </label>
+								<input type="text" class="form-control" name="cover_pic" id="edit-coverPic" placeholder="defaylt.png" />
+								<!-- <input type="file" name="cover_pic" id="edit-coverPic"/> -->
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>描述 </label>
+								<input type="text" class="form-control" name="desc" id="edit-desc" placeholder="" />
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>详情图片 </label>
+								<input type="text" class="form-control" name="detail_Pic" id="edit-detailPic" placeholder="" />
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>电话 </label>
+								<input type="text" class="form-control" name="tel" id="edit-tel" placeholder="" />
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>网站 </label>
+								<input type="text" class="form-control" name="web" id="edit-web" placeholder="" />
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>时长 </label>
+								<input type="text" class="form-control" name="tourtime" id="edit-time" placeholder="" />
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>交通 </label>
+								<input type="text" class="form-control" name="traffic" id="edit-traffic" placeholder="" />
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>价格 </label>
+								<input type="text" class="form-control" name="price" id="edit-price" placeholder="" />
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>开放时间 </label>
+								<input type="text" class="form-control" name="open_time" id="edit-opentime" placeholder="" />
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>地址 </label>
+								<input type="text" class="form-control" name="location" id="edit-address" placeholder="" />
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>经度 </label>
+								<input type="text" class="form-control" name="longitude" id="edit-longitude" placeholder="" />
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>纬度 </label>
+								<input type="text" class="form-control" name="latitude" id="edit-latitude" placeholder="" />
+							</div>
+							<div class="col-sm-5 d-inline-block">
+								<label>状态 </label>
+								<select name="state" id="edit-state">
+									<option value="0">未开放</option>
+									<option value="1">已开放</option>
+									<option value="2">状态异常</option>
+								</select>
+							</div>
+							<!-- <label>评论数 </label> -->
+							<input type="text" class="form-control" name="comment_num" id="edit-commentnum" placeholder="" hidden="hidden" value="0" />							
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-info" id="edit-sub">确认修改</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+						</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!-- 删除 -->
+			<div id="modal-delete-one" class="modal fade">
+				<div class="modal-dialog ">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">删除</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<form class="form-group">
+								确定删除？
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-info" id="delete-sub">确认删除</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 批量删除 -->
+			<div id="modal-mult-delete" class="modal fade">
+				<div class="modal-dialog ">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">批量删除</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<form class="form-group">
+								确定删除？
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-info" id="md-sub">确认删除</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
